@@ -3,24 +3,33 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "concurrently \"npm run codegen\" next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "codegen": "graphql-codegen --config codegen.ts --watch"
   },
   "dependencies": {
     "@babel/runtime": "^7.24.8",
     "@graphql-codegen/cli": "^5.0.2",
     "@next/swc-win32-x64-msvc": "^14.2.5",
+    "@parcel/watcher": "^2.4.1",
     "@react-oauth/google": "^0.12.1",
     "@swc/core": "^1.6.13",
+    "@tanstack/react-query": "^5.51.15",
+    "@tanstack/react-query-devtools": "^5.51.15",
+    "concurrently": "^8.2.2",
     "graphql-request": "^7.1.0",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
+    "react-hot-toast": "^2.4.1",
     "react-icons": "^5.2.1"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "5.0.2",
+    "@graphql-codegen/client-preset": "^4.3.3",
+    "@graphql-codegen/introspection": "4.0.3",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

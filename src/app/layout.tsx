@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "./globals.css";
+import { Toaster } from "react-hot-toast";
+import ReactQueryProvider from "../../hooks/ReactQueryProvider";
+
+const queryClient = new QueryClient();
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,9 +23,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <GoogleOAuthProvider clientId="128850958342-mgnd19ama41spdfr6jrm2ovov3puhabn.apps.googleusercontent.com">
-        <body className={inter.className}>{children}</body>
-      </GoogleOAuthProvider>
+      {/* <QueryClientProvider client={queryClient}> */}
+      <ReactQueryProvider>
+        <GoogleOAuthProvider clientId="128850958342-mgnd19ama41spdfr6jrm2ovov3puhabn.apps.googleusercontent.com">
+          <body className={inter.className}>{children}</body>
+          <Toaster />
+          <ReactQueryDevtools />
+        </GoogleOAuthProvider>
+      </ReactQueryProvider>
+      {/* </QueryClientProvider> */}
     </html>
   );
 }
