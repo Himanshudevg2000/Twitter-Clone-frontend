@@ -50,6 +50,7 @@ const sidebarMenuItems: TwitterSideBarButton[] = [
 
 export default function Home() {
   const { user } = useCurrentUser();
+  console.log('user: ', user);
   const queryClient = useQueryClient();
 
   const handleLoginWithGoogle = useCallback(
@@ -74,11 +75,35 @@ export default function Home() {
 
       // await queryClient.invalidateQueries(["current-user"]);
       await queryClient.invalidateQueries({
-        queryKey: ["current-user"],
+        queryKey: ["curent-user"],
       });
     },
     [queryClient]
   );
+
+  const handleLoginWithGoogle2 = useCallback(
+    async (cred: CredentialResponse) => {
+      const googleToken = cred.credential;
+      if (!googleToken) return toast.error(`Google token not found`);
+
+      const { verifyGoogleToken } = await graphqlClient.request(
+        verifyUserGoogleTokenQuery,
+        { token: googleToken }
+      );
+
+      toast.success("Verified Success");
+      console.log(verifyGoogleToken);
+
+      if (verifyGoogleToken)
+        window.localStorage.setItem("__twitter_token", verifyGoogleToken);
+
+      await queryClient.invalidateQueries({
+        queryKey: ["curent-user"],
+      });
+    },
+    [queryClient]
+  );
+
   return (
     <main>
       <div className="grid grid-cols-12 h-screen w-screen pl-36">
@@ -107,23 +132,24 @@ export default function Home() {
         </div>
 
         {user && (
-            <div className="absolute bottom-5 flex gap-2 items-center bg-slate-800 px-3 py-2 rounded-full">
-              {user && user.profileImageURL && (
-                <Image
-                  className="rounded-full"
-                  src={user?.profileImageURL}
-                  alt="user-image"
-                  height={50}
-                  width={50}
-                />
-              )}
-              <div>
-                <h3 className="text-xl">
-                  {user.firstName} {user.lastName}
-                </h3>
-              </div>
+          <div className="fixed bottom-5 left-[90px] flex gap-2 items-center p-2 rounded-full hover:bg-gray-200">
+            {user && user.profileImageURL && (
+              <Image
+                className="rounded-full"
+                src={user?.profileImageURL}
+                alt="user-image"
+                height={40}
+                width={40}
+              />
+            )}
+            <div>
+              <h3 className="text-lg">
+                {user.firstName} {user.lastName}
+              </h3>
+              <span className="text-sm break-words">{user.email}</span>
             </div>
-          )}
+          </div>
+        )}
 
         <div className="col-span-5 border-r-[1px] border-l-[1px] border-gray-600 ">
           <FeedCard />
@@ -136,7 +162,7 @@ export default function Home() {
           {!user && (
             <div className="p-2 bg-gray-200 rounded-lg">
               <h1 className=" text-xl">New To X ?</h1>
-              <GoogleLogin onSuccess={handleLoginWithGoogle} />
+              <GoogleLogin onSuccess={handleLoginWithGoogle2} />
             </div>
           )}
         </div>

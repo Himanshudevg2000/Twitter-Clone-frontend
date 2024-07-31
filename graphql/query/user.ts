@@ -1,27 +1,20 @@
-import { graphql} from "../../gql";
-
-// export const verifyUserGoogleTokenQuery = graphql(`
-// #graphql
-//     query VerifyGoogleToken($token: String!) {
-//         verifyGoogleToken(token: $token)
-//     }
-// `);
+import { graphql } from "../../gql";
 
 export const verifyUserGoogleTokenQuery = graphql(`
-    #graphql
-    query VerifyUserGoogleToken($token: String!) {
-      verifyGoogleToken(token: $token)
-    }
-  `);
+  #graphql
+  query VerifyUserGoogleToken($token: String!) {
+    verifyGoogleToken(token: $token)
+  }
+`);
 
 export const getCurrentUserQuery = graphql(`
-    query GetCurrentUser {
-      getCurrentUser {
-        id
-        profileImageURL
-        email
-        firstName
-        lastName
-      }
+  query GetCurrentUser {
+    getCurrentUser {
+      id
+      profileImageURL
+      email
+      firstName
+      lastName
     }
-  `);
+  }
+`);
