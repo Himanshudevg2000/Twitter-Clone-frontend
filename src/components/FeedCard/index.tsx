@@ -5,31 +5,36 @@ import { AiOutlineRetweet } from "react-icons/ai";
 import { CiHeart } from "react-icons/ci";
 import { IoStatsChartSharp } from "react-icons/io5";
 import { FaRegBookmark } from "react-icons/fa6";
+import { Tweet } from "../../../gql/graphql";
 
-const FeedCard = () => {
+interface FeedCardProps {
+  data: Tweet;
+}
+
+const FeedCard: React.FC<FeedCardProps> = (props) => {
+  const { data } = props;
   return (
     <>
       <div className=" border border-r-0 border-l-0 border-gray-200 p-5 hover:bg-gray-200">
         <div className="grid grid-cols-12 gap-3">
           <div className="col-span-1 rounded-full">
-            <Image
-              src="https://avatars.githubusercontent.com/u/103045944?v=4"
-              alt="user-image"
-              width={50}
-              height={50}
-              className="rounded-full"
-            />
+            {data.author?.profileImageURL && (
+              <Image
+                src={data.author?.profileImageURL as any}
+                alt="user-image"
+                width={50}
+                height={50}
+                className="rounded-full"
+              />
+            )}
           </div>
           <div className="col-span-11">
             <div className="flex pb-2">
-              <h2 className="text-lg font-bold">Himanshu Devgade</h2>
-              <h3 className="text-sm">@himanshu</h3>
+              <h2 className="text-lg font-bold"> {data.author?.firstName} {data.author?.lastName} </h2>
+              <h3 className="text-sm">{data.author?.email}</h3>
             </div>
             <p className="text-sm">
-              12. On one hand, Rahul Gandhi and his INDI Alliance attacked PM
-              Modi with a fake theory that Ambanis have a close tie with PM
-              Modi. However, Rahul Gandhi and his INDI Alliance hide their
-              direct relationship with Reliance and the Ambani family.
+              {data.content}
             </p>
           </div>
         </div>
